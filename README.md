@@ -44,3 +44,7 @@ Comes with dispatch queues managed by the system rather than threads directly.
 	race conditions
 	reader-writers problem
 	thread explosion
+		
+## Class Work / Projects
+[Thread Playground](https://github.com/SarinSwift/MOB2.3-ConcurrencyAndParallelism/tree/master/Threads.playground)
+
