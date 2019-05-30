@@ -11,25 +11,16 @@ let calculation = {
 
 let thread = Thread {
 
-    //TODO: What must the thread do here to match the expected output listed below?
-    // call the closure above to print 0...100
-//    calculation()
-}
-
-// creating a background thread
-let backgroundThread = Thread() {
+    print("On thread: \(Thread.current) doing work")
     calculation()
 }
-backgroundThread.name = "backgroundThread"
 
 print("On thread: \(Thread.current) doing nothing")
 
-//TODO: Give new thread its proper name, as in expected output...
-print("On thread: \(backgroundThread.name) doing work")
-backgroundThread.qualityOfService = .userInitiated
+thread.name = "Background Thread"
+thread.qualityOfService = .userInitiated
 
-//thread.start()
-backgroundThread.start()
+thread.start()
 
 /* EXPECTED OUTPUT:
  On thread: <NSThread: 0x6000022d28c0>{number = 1, name = main} doing nothing
