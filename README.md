@@ -88,11 +88,72 @@ expressed as either a function or an anonymous block of code
 ## Synchronous & Asynchronous Tasks 
 Different tasks can either be run syncly or asyncly  
 ***Synchronously:***  
-	When you schedule a work item(task) synchronously, your app will wait and block the current threads run loop. Even moving it to a knew queue, it still won’t save time since sync is waiting for every task to be done to continue to the next ones.  
+	When you schedule a work item(task) synchronously, your app will wait and block the current threads run loop. Even moving it to a knew queue, it still won’t save time since sync is waiting for every task to be done to continue to the next ones.   
+Conclusions: The current thread waits until the task is finished. Started on 1 thread and ***finished on the same thread***. Use this when you want to make sure one function does not get called twice. (ex. Pull to refresh where we only want it to happen once before another pull to refresh can happen, another example is when you want to fetch the data first so you can know if you want to have many different sections or not.)
+
+
 ***Asynchronously:***  
-	Schedules task for immediate execution, and immediately returns control to the calling function. So, we don’t wait until execution finishes. The task is queued right away but also returns responsiveness to the app. Can be submitted by code on one thread but actually run on a different thread.
+	Schedules task for immediate execution, and immediately returns control to the calling function. So, we don’t wait until execution finishes. The task is queued right away but also returns responsiveness to the app. Can be submitted by code on one thread but actually run on a different thread.  
+Conclusions: The call in Async returns immediately ordering the task to be done but not waiting for it to be finished before continuing with other tasks. They are started on 1 thread but actually ***run on a different thread***. We use it when your app wouldn’t have to wait for the callback to be finished (ex. Filtering, networking calls, local/remote data fetching).
 
 
+***What to NOT do:***  
+- Never perform UI updates on any queue other than the main queue  
+- Never call .sync on the current queue because this may cause a deadlock on the queue
+- Never call .sync on the main queue. You never want to submit a code block synchronously against the main queue either. This can cause your app to crash or even degrade the app's performance by locking the UI.
+
+
+***Deadlocks:***  
+2 or more tasks which are waiting on each other to finish and get stuck in a never-ending cycle. Neither of them can proceed until the one completes, but neither can proceed, so they can never complete.
+
+## How the Main Queue Fits
+When your app is first started, it creates these 3 things:  
+- ***Main Queue:*** A serial queue that's responsible for your UI. The main queue only executes code on the main thread.
+- ***Main Thread:*** Allocates your app's Application object. 
+- ***Main Stack*** 
+
+## Related Concepts to GCD
+***Critical Section***  
+A protected section where the shared resources are protected from concurrent(same time) access. Or else concurrent access to the same variables/resources can lead to unexpected behaviors or errors.  
+
+***Thread Safety***  
+Code can be safely called from different threads simultaneously without causing any problems. And is gauranteed to be free frorm race conditions. 
+
+## DispatchQueues
+Difining Attributes:
+- FIFO: First task that's added is the first task started in the queue.
+- Thread Safe: All dispatch queues are thread safe.
+- The decision of when to start a task is totally up to GCD
+
+
+***Serial Queue***  
+Guarantee that only one task runs at any given time.
+- contains a single thread associated with them. Allows a single task to be executed
+- Executes tasks one at a time
+- There's no risk of accessing the same critical section concurrently
+- The main queue is a serial queue
+
+
+***Concurrent Queue***  
+Can utilize as many threads as the system has resources for.
+- Threads will be created and released as needed for a concurrent queue
+- Multiple tasks can be run at the same time 
+- Tasks are started in order they were added.
+- However, tasks can finish at any time and you never know when the next block is going to start. Entirely up to GCD.
+
+## Types of Queues
+The GCD library (libdispatch) Creates several queues which all have different priorities that executes tasks concurrently. And these are the 3 types of queues.  
+- ***Main Queue:*** A serial queue that runs on the main thread
+- ***Global Dispatch Queue:*** Concurrent queues. And there are 4 different global dispatch queues: high, default, low, background
+- ***Custom Queue:*** You can create them to be either serial or concurrent queues
+ 
+## QoS Priority
+When setting up global dispatch queues, you need to specify the QoS level. This lets GCD know the priorrity level to give the task. And these are the 4 quality of services  
+- .userInteractive
+- .userInitiated
+- .utility
+- .background
+ 
 	
 ## Operations  
 - Objects that encapsulates data. And it adds a little more development overhead compared to GCD.
