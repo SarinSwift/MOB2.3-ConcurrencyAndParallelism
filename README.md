@@ -164,4 +164,7 @@ When setting up global dispatch queues, you need to specify the QoS level. This 
 		
 ## Class Work / Projects
 [Thread Playground](https://github.com/SarinSwift/MOB2.3-ConcurrencyAndParallelism/tree/master/Threads.playground)  
-[GCD Playground](https://github.com/SarinSwift/MOB2.3-ConcurrencyAndParallelism/tree/master/GCDPlay.playground)
+[GCD Playground](https://github.com/SarinSwift/MOB2.3-ConcurrencyAndParallelism/tree/master/GCDPlay.playground)  
+[QualityofService exercise on 2 queues](https://github.com/SarinSwift/MOB2.3-ConcurrencyAndParallelism/tree/master/QoS_exercise1.playground)  
+[QualityofService exercise on 2 queues + main queue](https://github.com/SarinSwift/MOB2.3-ConcurrencyAndParallelism/tree/master/QoS_ex2.playground)  
+[Working with DispatchGroups](https://github.com/SarinSwift/MOB2.3-ConcurrencyAndParallelism/tree/master/DispatchGroups_ex1.playground)  
