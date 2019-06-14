@@ -161,6 +161,39 @@ When setting up global dispatch queues, you need to specify the QoS level. This 
 - Easier to do complex tasks.
 - You should use operations when you need task reusability, communication between tasks, or closely monitor task execution.
 
+***Why should we use operations?***  
+- Reusability:  
+Instances of subclasses of Operation classes are a "Once and done" tasks. Meaning that when an operation object is added to 1 operationQueue, it can not be added to another operationQueue.  
+- Dependencies:  
+Allows developers to execute tasks in a specific order. Once the last dependant operation has finished, the operation object becomes ready and able to execute.  
+- KVO-compliant:  
+Key value observers where we can monitor the state of an operation or operation queue.  
+- Developer control:  
+Gives the developer more control over the operations lifecycle such as: max number of operations(knows how many operations run at the same time), execution priority levels(you can configure the execution priority level of an operation), pause/resume/cancel.  
+
+***How do operations work?***
+- Creating operations: UYou subclass the Operation, or use one of the defined classes(NSInvocationOperation or BlockOperation) 
+- Executing operations: there are 2 ways to execute where we can submit to an operation queue, or we can call the start() method  
+
+***Things to note***  
+An operation can only execute its task once and can not be used to execute its task again  
+Operations give us more control over number of operations and pause/resume/cancel functionality  
+BlockOperations can have more than 1 block  
+Easiest way to execute operations is with an operationQueue.
+
+**Block Operations**  
+It's a bridge between GCD DispatchQueues and Operations. A blockOperation can also be used to execute several blocks at once without having to create seperate operation objects for each.  
+When we execute 1 operation, the operation is considered finished only when all blocks have finished executing  
+
+**Operation's life cycle event**  
+It can exist in any state: Pending -> Ready -> Executing -> Finished. Where the first 3 steps can also point to a Cancelled state.  
+**Operation state properties**  
+- isReady: lets client know when an operation is ready to execute
+- isExecuting: once start() method is run, it passes on to this stage
+- isCancelled: informs clients that a cancellation has happened. 
+- isFinished: lets client know that an operation has finished its task succesfully or was cancelled and is exiting.
+
+
 		
 ## Class Work / Projects
 [Thread Playground](https://github.com/SarinSwift/MOB2.3-ConcurrencyAndParallelism/tree/master/Threads.playground)  
