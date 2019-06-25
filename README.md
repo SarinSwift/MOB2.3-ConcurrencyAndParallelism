@@ -6,26 +6,26 @@
 
 ## Concurrency & Parallelism
 **Apps need concurrency to keep UI responsive:**    
-  When you create a new app, you're working on the main thread by default. There are tasks that take longer though and 
+  When you create a new app, you're working on the main thread by default. There are tasks that take longer though and
   the main thread might block it(becomes unresponsive). So, we can then run it on another thread such as the background thread.
-  
+
 **Concurrency-** is how we structure the app to avoid slow ui problems. Take tasks somewhere else (not on main thread). There are underlying problems though.  
 **Process-** The application running it’s code on your device. It needs space and resources dependent from programs. Contains at least 1 thread(main thread) and may have more threads related. Has different address spaces(many threads under this process may share the same adress)  
-**Thread-**  something that happened inside a process. Something executing. Smallest sequence that can be managed by OS(operating system) schedular. 
+**Thread-**  something that happened inside a process. Something executing. Smallest sequence that can be managed by OS(operating system) schedular.
 	Each thread comes with it’s own stack space. Executes concurrently(operates at the same time) but up to the OS.   
 **Task-** A quantifying work to be performed. Ex: calculate area, apply blur image, create data structure, read/write/fetch data, converting to JSON. Tasks run on threads!! All UI related tasks run on the main thread.  
 **Parallelism-** Shifting from task to task. Being run at the same time. A task can be broken down into many sub tasks and all these can be processed separately AND can be completed marked done at the same time. Tasks can be broken down into smaller pieces. Can optimize performance.
 	‘How we get them done’  
-**Concurrency-** Compose problems into smaller units not caring about order. This allows parallelism as well which can improve execution. 
+**Concurrency-** Compose problems into smaller units not caring about order. This allows parallelism as well which can improve execution.
 	‘How we structure things’  
 **Multiple Processors-**  multi cores executes multiple threads  
 	Multiple cores: we spread the tasks out. Less task for each thread, and can be done at the same time.  
-  
-  
-**Parallelism VS Concurrency:**  
-Single cores can’t technically do parallelism because they don’t need to break tasks down.	
 
-**Cores on an iOS device:** 
+
+**Parallelism VS Concurrency:**  
+Single cores can’t technically do parallelism because they don’t need to break tasks down.
+
+**Cores on an iOS device:**
 There can be many threads executing at once as there are cores in a device’s CPU (can have more threads than there are cores)
 
 **How can we apply concurrency?:**
@@ -53,14 +53,14 @@ The main idea for GCD is to move the management of thread pools closer toward th
 
 **Why use GCD?**  
 	- Improves responsiveness of app
-	- Simplifies the creation/execution of tasks. Can be asynchronous or synch 
+	- Simplifies the creation/execution of tasks. Can be asynchronous or synch
 	- easier to use than blocks or threads
 
 **What does GCD do?**  
-	- Tasks can be run in parallel or queued up for execution 
+	- Tasks can be run in parallel or queued up for execution
 	- Abstracts the idea of threads (Dispatch Queues, work items)
-	- We have less lines of code to worry about, all happens behind the scenes 
-	
+	- We have less lines of code to worry about, all happens behind the scenes
+
 **Concurrency problems:**  
 	- deadlocks  
 	- race conditions  
@@ -77,15 +77,15 @@ They manage the execution of tasks on your app's main or background thread.
 - Thread safe: can be accessed from different threads simultaneously without locking.
 - Work submitted through here will work on a **thread pools**  
 
-**Thread Pools** 
+**Thread Pools**
 Instead of creating new threads whenever a task needs to be executed, these threads are taken from a pool of available threads. (Created and managed by the Operating System)
 
-**Tasks** 
+**Tasks**
 Tasks encapsulates code and data into a new object  
 Light weight, easy to create and enqueue  
 expressed as either a function or an anonymous block of code  
 
-## Synchronous & Asynchronous Tasks 
+## Synchronous & Asynchronous Tasks
 Different tasks can either be run syncly or asyncly  
 ***Synchronously:***  
 	When you schedule a work item(task) synchronously, your app will wait and block the current threads run loop. Even moving it to a knew queue, it still won’t save time since sync is waiting for every task to be done to continue to the next ones.   
@@ -109,15 +109,15 @@ Conclusions: The call in Async returns immediately ordering the task to be done 
 ## How the Main Queue Fits
 When your app is first started, it creates these 3 things:  
 - ***Main Queue:*** A serial queue that's responsible for your UI. The main queue only executes code on the main thread.
-- ***Main Thread:*** Allocates your app's Application object. 
-- ***Main Stack*** 
+- ***Main Thread:*** Allocates your app's Application object.
+- ***Main Stack***
 
 ## Related Concepts to GCD
 ***Critical Section***  
 A protected section where the shared resources are protected from concurrent(same time) access. Or else concurrent access to the same variables/resources can lead to unexpected behaviors or errors.  
 
 ***Thread Safety***  
-Code can be safely called from different threads simultaneously without causing any problems. And is gauranteed to be free frorm race conditions. 
+Code can be safely called from different threads simultaneously without causing any problems. And is gauranteed to be free frorm race conditions.
 
 ## DispatchQueues
 Difining Attributes:
@@ -137,7 +137,7 @@ Guarantee that only one task runs at any given time.
 ***Concurrent Queue***  
 Can utilize as many threads as the system has resources for.
 - Threads will be created and released as needed for a concurrent queue
-- Multiple tasks can be run at the same time 
+- Multiple tasks can be run at the same time
 - Tasks are started in order they were added.
 - However, tasks can finish at any time and you never know when the next block is going to start. Entirely up to GCD.
 
@@ -146,15 +146,15 @@ The GCD library (libdispatch) Creates several queues which all have different pr
 - ***Main Queue:*** A serial queue that runs on the main thread
 - ***Global Dispatch Queue:*** Concurrent queues. And there are 4 different global dispatch queues: high, default, low, background
 - ***Custom Queue:*** You can create them to be either serial or concurrent queues
- 
+
 ## QoS Priority
 When setting up global dispatch queues, you need to specify the QoS level. This lets GCD know the priorrity level to give the task. And these are the 4 quality of services  
 - .userInteractive
 - .userInitiated
 - .utility
 - .background
- 
-	
+
+
 ## Operations  
 - Objects that encapsulates data. And it adds a little more development overhead compared to GCD.
 - You have more control over submitted tasks, scheduling through adding dependencies, can cancel/reuse/suspend them.
@@ -172,7 +172,7 @@ Key value observers where we can monitor the state of an operation or operation 
 Gives the developer more control over the operations lifecycle such as: max number of operations(knows how many operations run at the same time), execution priority levels(you can configure the execution priority level of an operation), pause/resume/cancel.  
 
 ***How do operations work?***
-- Creating operations: UYou subclass the Operation, or use one of the defined classes(NSInvocationOperation or BlockOperation) 
+- Creating operations: UYou subclass the Operation, or use one of the defined classes(NSInvocationOperation or BlockOperation)
 - Executing operations: there are 2 ways to execute where we can submit to an operation queue, or we can call the start() method  
 
 ***Things to note***  
@@ -190,11 +190,66 @@ It can exist in any state: Pending -> Ready -> Executing -> Finished. Where the 
 **Operation state properties**  
 - isReady: lets client know when an operation is ready to execute
 - isExecuting: once start() method is run, it passes on to this stage
-- isCancelled: informs clients that a cancellation has happened. 
+- isCancelled: informs clients that a cancellation has happened.
 - isFinished: lets client know that an operation has finished its task succesfully or was cancelled and is exiting.
 
 
-		
+## Common iOS questions
+1. What is Concurrency?  
+It is the process of how tasks run at the same time. For example, when making a networking call, whihc may take a long time to process, we'd want to separate updating the UI on a different thread.
+2. What is Parallelism?  
+It is when tasks run at the same time but on different threads.
+3. What are most commonly used APIs to implement concurrency in iOS?  
+The 2 most common ones I can think of are Operations and GCD
+4. What is a queue? What is their relationship with FIFO?  
+A queue is similar to the data structure where it stores the tasks within them and the tasks are getting run based on which one was added to the queue first. So they're first in first out.
+5. What are all the different types of queues and their priorities?  
+There are 4 priorities: userInterface, userInteractive, default, and background.  
+Types of queues: Serial queue, and concurrent queue
+6. What is the difference between an asynchronous and a synchronous task?  
+Asynchronous tasks get run on different threads but they are run at the same time.  
+Synchronous tasks run in order. SO there will never be tasks run at the same time.  
+7. What is the difference between a serial and a concurrent queue?  
+Serial queues doesn't allow tasks to be run simultaneously.  
+Concurrent queues allows many tasks to be run on different threads and simultaneously.
+8. How does GCD work?  
+GCD, under the hood, contains a thread pool where the developer does not have the ability to know or state which task will be executed first. The tasks are put into a thread pool and are processed based on fifo.
+9. Explain the relationship between a process, a thread and a task.
+Process - Contains at least 1 thread, but can have many threads.
+Thread - is something that happens inside a process
+Task - a piece of work to be preformed. It gets run on threads.
+10. Are there any threads running by default? Which ones?  
+When we create an Xcode project, the main thread will be run by default.
+11. How does iOS support multithreading?  
+iOS contains GCD and operations to support multithreading.
+12. What is NSOperation? and NSOperationQueue?  
+NSOperation is a class where the developer has more control over the execution of the tasks and the states!  
+NSOperationQueue is the queue that contains all the NSOperation objects  
+13. What is QoS?  
+Quality of Service - where we can explicitly state which task we want to be run first. The highest quality would be .userInitiated, and the lowest is .background.
+14. Explain priority inversion.  
+Priority Inversion is when a lower priority task gets run before the higher priority task is run. Where it should have been the other way round. This will cause something called race conditions.
+15. Explain dependencies in Operations  
+If an operation depends on another operation, the depending operation must finish executing first before the current operation gets run.
+16. When do you use GCD vs Operations?
+Use operations if you want to have more control over tasks and the order they get run. Use GCD's for ease of use because it handles the tasks and order of run by itself.
+17. How do we know if we have a race condition?  
+We will have a race condition if the variables getting accessed are incorrect.
+18. What is deadlock?  
+A deadlock is when 2 threads want access to the same resource but they are constantly waiting for each other so no thread ever gets what they want.
+19. What is context switching in multithreading?  
+Context switching is the process of changing threads to run other tasks first and then coming back to the same thread to run the current task. This can happen continuously.
+20. What are the ways we can execute an Operation? How are they different?  
+We can execute an operation by creating an instance of an operation and then either putting it in a queue, or calling .start method on it.
+21. What is DispatchSemaphore and when can we use it?  
+DispatchSemaphore is a class where we can create a semaphore and run different tasks on it.
+22. What happens if you call sync() on the current or main queue?  
+It can cause the app to crash because calling synch on the main thread will stop all tasks that are currently running. 
+
+
+
+
+
 ## Class Work / Projects
 [Thread Playground](https://github.com/SarinSwift/MOB2.3-ConcurrencyAndParallelism/tree/master/Threads.playground)  
 [GCD Playground](https://github.com/SarinSwift/MOB2.3-ConcurrencyAndParallelism/tree/master/GCDPlay.playground)  
