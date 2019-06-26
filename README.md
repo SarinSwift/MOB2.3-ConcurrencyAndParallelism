@@ -196,55 +196,77 @@ It can exist in any state: Pending -> Ready -> Executing -> Finished. Where the 
 
 ## Common iOS questions
 1. What is Concurrency?  
-It is the process of how tasks run at the same time. For example, when making a networking call, whihc may take a long time to process, we'd want to separate updating the UI on a different thread.
+Concurrency is how we structure the app to avoid slow UI problems. For example, when making a networking call, which may take a long time to process, we'd want to separate updating the UI on a different thread.
+
 2. What is Parallelism?  
-It is when tasks run at the same time but on different threads.
+Parallelism is the process of how we run tasks at different times. Shifting from task to task.
+
 3. What are most commonly used APIs to implement concurrency in iOS?  
 The 2 most common ones I can think of are Operations and GCD
+
 4. What is a queue? What is their relationship with FIFO?  
-A queue is similar to the data structure where it stores the tasks within them and the tasks are getting run based on which one was added to the queue first. So they're first in first out.
+Queues manage execution of tasks on your thread. The tasks that get enqueued are executed in order where they were added to the queue.
+
 5. What are all the different types of queues and their priorities?  
-There are 4 priorities: userInterface, userInteractive, default, and background.  
-Types of queues: Serial queue, and concurrent queue
+Main Queue, Dispatch Queue(serial & concurrent), and Custom Queues.
+There are 4 priority levels: userInteractive, userInitiated, utility, and background. Each written in order of their priorities   
+
 6. What is the difference between an asynchronous and a synchronous task?  
-Asynchronous tasks get run on different threads but they are run at the same time.  
-Synchronous tasks run in order. SO there will never be tasks run at the same time.  
+Asynchronous tasks return immediately without waiting for the work to complete.
+Synchronous tasks wait for the work to be finished before returning on to the next task.
+
 7. What is the difference between a serial and a concurrent queue?  
-Serial queues doesn't allow tasks to be run simultaneously.  
-Concurrent queues allows many tasks to be run on different threads and simultaneously.
+Serial queues executes 1 task at a time.   
+Concurrent queues executes simultaneous tasks at the same time. Tasks are completed by complexity and not by order.
+
 8. How does GCD work?  
-GCD, under the hood, contains a thread pool where the developer does not have the ability to know or state which task will be executed first. The tasks are put into a thread pool and are processed based on fifo.
+GCD, under the hood, contains a thread pool where the developer does not have the ability to know or change which task will be executed first. The tasks are put into a thread pool and are processed based on fifo. Since we, developers, don't need to create or destroy threads, we get great performance and low execution latency.  
+
 9. Explain the relationship between a process, a thread and a task.
 Process - Contains at least 1 thread, but can have many threads.
 Thread - is something that happens inside a process
 Task - a piece of work to be preformed. It gets run on threads.
+
 10. Are there any threads running by default? Which ones?  
 When we create an Xcode project, the main thread will be run by default.
+
 11. How does iOS support multithreading?  
-iOS contains GCD and operations to support multithreading.
+iOS contains GCD and operations to support multithreading. GCD is based on thread pool pattern so it supports multithreading.
+
 12. What is NSOperation? and NSOperationQueue?  
-NSOperation is a class where the developer has more control over the execution of the tasks and the states!  
-NSOperationQueue is the queue that contains all the NSOperation objects  
+NSOperation is a class which represents a unit of work. Is thread safe
+NSOperationQueue is the queue that contains all the NSOperation objects. It regulates the concurrent execution of orders.  
+
 13. What is QoS?  
-Quality of Service - where we can explicitly state which task we want to be run first. The highest quality would be .userInitiated, and the lowest is .background.
+Quality of Service - where we can explicitly state which task we want to be run first. The highest quality would be .userInteractive, and the lowest is .background.
+
 14. Explain priority inversion.  
-Priority Inversion is when a lower priority task gets run before the higher priority task is run. Where it should have been the other way round. This will cause something called race conditions.
+Priority Inversion is when a lower priority task gets run before the higher priority task is run. Where it should have been the other way round. This will result in the app being blocked.
+
 15. Explain dependencies in Operations  
-If an operation depends on another operation, the depending operation must finish executing first before the current operation gets run.
+dependencies are the array that holds all the operations objects. All the objects within the dependency must finish executing first before the current object can begin executing.
+
 16. When do you use GCD vs Operations?
-Use operations if you want to have more control over tasks and the order they get run. Use GCD's for ease of use because it handles the tasks and order of run by itself.
+Operations are a higher level abstraction of GCD. Operations provide support for dependencies, kvo(monitor the state of an operation), pause/cancel/resume, control(number of queued operations).  
+GCD's are good to use when you don't want to go through the hassle of created operations, but just want to dispatch a block of code!
+
 17. How do we know if we have a race condition?  
-We will have a race condition if the variables getting accessed are incorrect.
+We will have a race condition if the variables getting accessed are incorrect. This happens when 2 threads try to access the same resource at the same time.
+
 18. What is deadlock?  
-A deadlock is when 2 threads want access to the same resource but they are constantly waiting for each other so no thread ever gets what they want.
+A deadlock is when 2 threads want access to the same resource but both are waiting for other's resources to complete it's task. And none is able to leave the lock.
+
 19. What is context switching in multithreading?  
 Context switching is the process of changing threads to run other tasks first and then coming back to the same thread to run the current task. This can happen continuously.
+
 20. What are the ways we can execute an Operation? How are they different?  
-We can execute an operation by creating an instance of an operation and then either putting it in a queue, or calling .start method on it.
+We can execute an operation by creating an instance of an operation and then putting it in a queue, or either calling .start() method on it.
+
 21. What is DispatchSemaphore and when can we use it?  
-DispatchSemaphore is a class where we can create a semaphore and run different tasks on it.
+DispatchSemaphore is a class where we can create a semaphore and run different tasks on it. It works like this: we send a request to a semaphore, once the semaphore gives us the green light we can use the resource, once the resource is no longer necessary we send back a signal allowing it to be used else where.
+
 22. What happens if you call sync() on the current or main queue?  
-It can cause the app to crash because calling synch on the main thread will stop all tasks that are currently running. 
+It can cause the app to crash because calling synch on the main thread will stop all tasks that are currently running. Or it can degrade the app's performance by locking the UI.
 
 
 
