@@ -222,9 +222,9 @@ Concurrent queues executes simultaneous tasks at the same time. Tasks are comple
 8. How does GCD work?  
 GCD, under the hood, contains a thread pool where the developer does not have the ability to know or change which task will be executed first. The tasks are put into a thread pool and are processed based on fifo. Since we, developers, don't need to create or destroy threads, we get great performance and low execution latency.  
 
-9. Explain the relationship between a process, a thread and a task.
-Process - Contains at least 1 thread, but can have many threads.
-Thread - is something that happens inside a process
+9. Explain the relationship between a process, a thread and a task.  
+Process - Contains at least 1 thread, but can have many threads.  
+Thread - is something that happens inside a process.  
 Task - a piece of work to be preformed. It gets run on threads.
 
 10. Are there any threads running by default? Which ones?  
@@ -247,11 +247,11 @@ Priority Inversion is when a lower priority task gets run before the higher prio
 dependencies are the array that holds all the operations objects. All the objects within the dependency must finish executing first before the current object can begin executing.
 
 16. When do you use GCD vs Operations?
-Operations are a higher level abstraction of GCD. Operations provide support for dependencies, kvo(monitor the state of an operation), pause/cancel/resume, control(number of queued operations).  
+Operations are a higher level abstraction of GCD. Operations provide support for dependencies, kvo(monitor the state of an operation), pause/cancel/resume, control(number of queued operations), reuse.  
 GCD's are good to use when you don't want to go through the hassle of created operations, but just want to dispatch a block of code!
 
 17. How do we know if we have a race condition?  
-We will have a race condition if the variables getting accessed are incorrect. This happens when 2 threads try to access the same resource at the same time.
+We will have a race condition if the variables getting accessed are incorrect. This happens when 2 threads try to access the same resource at the same time. We can easily know this if there are different expected results.
 
 18. What is deadlock?  
 A deadlock is when 2 threads want access to the same resource but both are waiting for other's resources to complete it's task. And none is able to leave the lock.
